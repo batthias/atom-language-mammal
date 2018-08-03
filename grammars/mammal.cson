@@ -1,0 +1,52 @@
+# If this is your first time writing a language grammar, check out
+# https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/
+#
+# To ease the creation of the grammar, this file is not written completely in CSON.
+# Instead it includes some extensions, that have to be transformed back to the CSON format.
+# The file ending in ".uc.cson" is the uncompiled one, that is supposed to be compiled to
+# a file of the same name with the ".cson" extension only.
+# The `regex-railroad-diagram` atom extension is probably useful for writing this.
+
+scopeName: 'source.mammal'
+name: 'Mammal'
+fileTypes: [
+  'mm'
+]
+firstLineMatch: '#![ \t]*\\/.*\\bmammal\\b.'  # match the shebang that specifies mammal files
+
+# Patterns to apply ---------------------------------------------------------------------
+
+patterns: [
+  {
+    'include': '#lineComments'
+  }
+  {
+    begin: '({{)(#note)(}})'
+    beginCaptures:
+      0: {name: 'meta.block.start.mammal'}  # whole match
+      1: {name: 'punctuation.definition.block.mammal'}
+      2: {name: 'keyword.note.mammal'}
+      3: {name: 'punctuation.definition.block.mammal'}
+    end: '({{)(/note)(}})'
+    endCaptures:
+      0: {name: 'meta.block.end.mammal'}  # whole match
+      1: {name: 'punctuation.definition.block.mammal'}
+      2: {name: 'keyword.note.mammal'}
+      3: {name: 'punctuation.definition.block.mammal'}
+    name: 'meta.block.note.mammal'
+  }
+]
+
+# Repository of reusable patterns -------------------------------------------------------
+
+repository:
+  lineComments: # A comment on a line of its own
+    match: '^ *(#\\s)(.*)$'
+    name: 'comment'
+    captures:
+      1: {name: 'comment.delimiter'}
+      2: {name: 'comment.text'}
+
+  somethingReusable:  # example reusable rule
+    match: 'some_regex'
+    name: 'something'

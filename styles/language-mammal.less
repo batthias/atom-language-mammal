@@ -1,0 +1,82 @@
+/*
+ * Mammal stylesheets
+ * TODO: check whether those still work with the current version of atom
+ */
+
+@font-face {
+    font-family: batthiasIcons;
+    src: url(atom://language-mammal/styles/batthias-icons.woff);
+}
+
+/* Change the icon for mammal which is used in the file tabs and tree view
+ * unfortunately there is already a type for .mm
+ * in file-type-icons. Thus the !important keywords.
+ */
+
+.tab .title[data-path$=".mm"]:before,
+.icon[data-name$=".mm"]:before {
+    font-family: batthiasIcons !important;
+    color: hsl(140, 58%, 56%) !important;
+    content: "\e900" !important; // [MM]
+    //content: "\e901" !important;  // aardvark
+}
+
+// Some color changes
+// TODO: do these properly, as I don't think packages should alter colors!
+.syntax--mammal {
+    &.syntax--shebang .syntax--annotation.syntax--mammal {
+        color: hsl(136, 34%, 51%);
+    }
+    &.syntax--shebang .syntax--v-aardvark {  // #!/…/ mammal -v aardvark
+        text-decoration: underline;
+        position: relative;
+        &:hover:before {
+            font-family: batthiasIcons;
+            font-size: 5em;
+            display: block;
+            position: absolute;
+            left: -0.3em;
+            top: 0.3em;
+            padding: 0 0.3em 0 0.2em;
+            border: 1px solid black;
+            border-radius: 2px;
+            background-color: hsl(180, 16%, 10%);
+            text-align: center;
+            content: "\e901"; // aardvark
+        }
+        &:hover:after {
+            display: inline-block;
+            text-decoration: none;
+            content: " = v0.0.x"
+        }
+    }
+    &.syntax--keyword.syntax--operator {  // and or + - …
+        color: hsv(188, 58%, 76%);
+    }
+    &.syntax--format {  // embedded variables in strings
+        color: hsv(219, 10%, 74%);
+        &.syntax--begin, &.syntax--end {
+            color: hsv(0, 67%, 70%);
+        }
+    }
+    &.syntax--source.syntax--typecast {  // <str> 55
+        color: hsv(272, 40%, 92%);
+        font-style: italic;
+        .syntax--operator {  // <str|int>, <*>, <math.integral>
+            color: hsv(272, 60%, 92%);
+        }
+    }
+    &.syntax--source.syntax--classname {  // <object>.total()
+        color: hsv(166, 18%, 70%);
+    }
+    &.syntax--backticks {  // `import`.name
+        &.syntax--quoted {
+          background-color: hsva(335, 100%, 20%, 0.3);
+          border-radius: 0.4em;
+        }
+        &.syntax--begin, &.syntax--end {
+            color: hsv(351, 75%, 91%);
+            font-weight: bold;
+        }
+    }
+}

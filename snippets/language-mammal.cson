@@ -1,0 +1,11 @@
+# If you want some example snippets, check out:
+# https://github.com/atom/language-javascript/blob/master/snippets/javascript.cson
+
+'.source.mammal':
+  '#!/usr/bin/env mammal':
+    prefix: 'shebang'
+    body: '#!/usr/bin/env mammal -v aardvark\n'
+
+  'Import':
+    'prefix': 'import'
+    'body': 'import ${1:package.module}: ${2:names}'

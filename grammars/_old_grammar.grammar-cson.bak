@@ -1,0 +1,1507 @@
+'scopeName': 'source.mammal'
+'name': 'Mammal'
+'fileTypes': [
+  'cmm'  # (partially) compiled mammal file
+  'mm'  # mammal source file
+]
+# This file uses additional character classes:
+# :α: = alphabitic characters including greek
+# :α0: = alphanumeric characters including greek
+
+'firstLineMatch': /^#!\/.*\bmammal\b/  # shebang −> Mammal
+'patterns': [
+  # Compiler hint / shebang / Line comments
+  { 'include': '#line_comment' }
+  # Strings
+  { 'include': '#string' }
+  # Expressions in backticks
+  { 'include': '#backticks'}
+
+  {  # Hexadecimal integer
+    'match': /\b(0x[0-9A-Fa-f_]*\h)\b/  # e.g. 0x3AF8
+    'name': 'constant.numeric.integer.hexadecimal.mammal'
+  }
+  {  # Octal integer
+    'match': /\b(0o[0-7_]*[0-7])\b/  # e.g. 0o567
+    'name': 'constant.numeric.integer.octal.mammal'
+  }
+  {  # Binary integer
+    'match': /\b(0b[01_]*[01])\b/  # e.g. 0b010010110
+    'name': 'constant.numeric.integer.binary.mammal'
+  }
+  {  # Float in scientific notation (with unit) e.g. 1.2ᴇ-12_kg
+    'match': /\b((?:\d+\.)?\d+[ᴇ⏨][−\-\+]?\d+)([:α:_Å]*)\b/
+    'captures':
+      '1':
+        'name': 'constant.numeric.float.scientific.mammal'
+      '2':
+        'name': 'keyword.other.unit.mammal'
+  }
+  {  # Float (with unit) e.g. 16.5 or 0.001mm or 123.7_Å
+    'match': /\b(\d+\.\d+)([:α:_Å]*)/
+    'captures':
+      '1':
+        'name': 'constant.numeric.float.mammal'
+      '2':
+        'name': 'keyword.other.unit.mammal'
+  }
+  {  # Integer (with '_' somewhere inbetween) (and unit at the end)
+    'match': /\b(\d[0-9_]*\d|\d)([:α:_Å]*)/
+    'captures':
+      '1':
+        'name': 'constant.numeric.integer.decimal.mammal'
+      '2':
+        'name': 'keyword.other.unit.mammal'
+  }
+
+  # Typecasts and classnames
+  { 'include': '#typecast' }
+  { 'include': '#classname' }
+
+  {  # Import with `import cats` or `import cats: catmando, freya, humphrey`
+    'match': /\b(import)\b/
+    'name': 'keyword.control.import.mammal'
+  }
+
+  {  # Flow conditionals
+    'match': /\b(if|else if|else|switch)\b/
+    'name': 'keyword.control.conditional.mammal'
+    'comment': 'keywords that delimit flow conditionals'
+  }
+  {  # Exception stuff
+    'match': /\b(except|finally|try|raise)\b/
+    'name': 'keyword.control.exception.mammal'
+    'comment': 'keywords that delimit an exception'
+  }
+  {  # Loop stuff
+    'match': /\b(for|while)\b/
+    'name': 'keyword.control.repeat.mammal'
+    'comment': 'keywords that delimit loops'
+  }
+  {  # Breakers etc.
+    'match': /\b(with|break|continue|pass|return|yield)\b/
+    'name': 'keyword.control.statement.mammal'
+    'comment': 'keywords that alter flow from within a block'
+  }
+  {  # Logical keyword operators
+    'match': /\s(and|in|is|or|xor)\s/
+    'captures':
+      '1':
+        'name': 'keyword.operator.logical.mammal'
+  }
+  {  # Logical not keyword operator
+     'match': /\b(not)\s/
+     'captures':
+       '1':
+         'name': 'keyword.operator.logical.prefix.mammal'
+  }
+
+  {  # Other keywords
+    'match': /\b(as|of|assert|del)\b/
+    'name': 'keyword.other.mammal'
+    'comment': 'keywords that haven\'t fit into other groups (yet).'
+  }
+  { 'include': '#from' }
+
+  {  # Assignment including an operation
+    'match': /\s([+−⋅%&|^∪∩-]\=|\/\=|\/\/\=)\s/
+    'captures':
+      '1':
+        'name': 'keyword.operator.assignment.augmented.mammal'
+  }
+  {  # Assignment
+    'match': /\s(:\=)\s/
+    'captures':
+      '1':
+        'name': 'keyword.operator.assignment.mammal'
+  }
+  {  # argument-assignment in a tuple
+    'match': /:\=/
+    'name': 'keyword.operator.argument-assignment.mammal'
+  }
+
+  {  # Comparision
+    'match': /\s(≤|≥|<|>|\=|≈|≠|⊂|⊃)\s/
+    'captures':
+      '1':
+        'name': 'keyword.operator.comparison.mammal'
+  }
+  {  # Arithmetic operators
+    'match': /\+|\-|−|⋅|\*|\/|\/\/|%|&|\||\^/
+    'name': 'keyword.operator.arithmetic.mammal'
+  }
+  {  # Set operatoren
+    'match': /\s[∩∪]\s/
+    'captures':
+      '1':
+        'name': 'keyword.operator.set.mammal'
+  }
+  {  # lambda-operator
+    'match': /\s[-−]>\s/
+    'captures':
+      '1':
+        'name': 'keyword.operator.lambda.mammal'
+  }
+
+  {  # Define a class
+    'begin': /\b(class)(?=\s)/
+    'beginCaptures':
+      '1':
+        'name': 'keyword.control.class.mammal'
+    'end': /:/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.class.end'
+    'name': 'meta.class-definition.mammal'
+    'patterns': [
+      # { 'include': '#everything_else_illegal' }
+      { 'include': '#classname' }
+      { 'include': '#from' }
+      { 'include': '#comma' }
+    ]
+  }
+  {  # Define a function or method
+    'match': /\b(def)\b/
+    'name':'storage.type.function.mammal'
+  }
+
+]
+
+################################################################################
+# End of patterns ##############################################################
+################################################################################
+
+'repository':
+
+  'line_comment':  # line comments including shebang / compiler hint
+    'begin': /((^\s*)|\s)(?=#(\s|!))/
+    'beginCaptures':
+      '2':
+        'name': 'punctuation.whitespace.comment.leading.mammal'
+    'end': /(?!\G)/
+    'patterns': [
+      {
+        'begin': /(#)\s/
+        'beginCaptures':
+          '1':
+            'name': 'punctuation.definition.comment.mammal'
+        'end': /\n/
+        'name': 'comment.line.number-sign.mammal'
+      }
+      {
+        'begin': /#!/
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.comment.shebang.mammal'
+        'end': /\n/
+        'name': 'comment.line.number-sign.shebang.mammal'
+        'patterns': [
+          {
+            'match': /\baardvark\b/
+            'name': 'storage.type.annotation.v-aardvark.mammal'
+          }
+          {
+            'match': /(?<=\s)[:α:]+\b/
+            'name': 'storage.type.annotation.mammal'
+          }
+        ]
+      }
+    ]
+
+
+  ##############################################################################
+  # String stuff ###############################################################
+  ##############################################################################
+
+  'string':
+    'patterns': [
+      { 'include': '#triplequoted_raw_formatted' }
+      { 'include': '#triplequoted_raw' }
+      { 'include': '#triplequoted_formatted' }
+      { 'include': '#triplequoted' }
+
+      { 'include': '#sextuplequoted_raw_formatted' }
+      { 'include': '#sextuplequoted_raw' }
+      { 'include': '#sextuplequoted_formatted' }
+      { 'include': '#sextuplequoted' }
+
+      { 'include': '#singlequoted_raw_formatted' }
+      { 'include': '#singlequoted_raw' }
+      { 'include': '#singlequoted_formatted' }
+      { 'include': '#singlequoted' }
+
+      { 'include': '#doublequoted_raw_formatted' }
+      { 'include': '#doublequoted_raw' }
+      { 'include': '#doublequoted_formatted' }
+      { 'include': '#doublequoted' }
+    ]
+
+  'triplequoted_raw_formatted':  # Formatted raw strings triplequoted
+    'begin': /(rf|fr)'''/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /'''(?!')/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.triple.formatted.mammal'
+    'patterns': [
+      { 'include': '#escaped_format' }
+    ]
+
+  'triplequoted_raw':  # Raw strings triplequoted
+    'begin': /r'''/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /'''(?!')/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.triple.raw.mammal'
+    'patterns': [
+      { 'include': '#docstring'}
+    ]
+
+  'triplequoted_formatted':  # Formatted strings triplequoted
+    'begin': /f'''/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /'''(?!')/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.triple.formatted.mammal'
+    'patterns': [
+      { 'include': '#escaped_char' }
+      { 'include': '#escaped_charname' }
+      { 'include': '#escaped_format' }
+    ]
+
+  'triplequoted':  # Triplequoted strings
+    'begin': /'''/  # impossible with /.../-Syntax
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /'''(?!')/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.triple.mammal'
+    'patterns': [
+      { 'include': '#escaped_char' }
+      { 'include': '#escaped_charname' }
+      { 'include': '#docstring'}
+    ]
+
+
+  'sextuplequoted_raw_formatted':  # Interpolated raw strings sextuplequoted
+    'begin': /(rf|fr)"""/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /"""(?!\")/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.sextuple.formatted.mammal'
+    'patterns': [
+      { 'include': '#escaped_format'}
+    ]
+
+  'sextuplequoted_raw':  # Raw strings sextuplequoted
+    'begin': /r"""/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /"""(?!\")/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.sextuple.raw.mammal'
+    'patterns': [
+      { 'include': '#docstring'}
+    ]
+
+  'sextuplequoted_formatted':  # Interpolatetd strings sextuplequoted
+    'begin': /f"""/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /"""(?!\")/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.sextuple.formatted.mammal'
+    'patterns': [
+      { 'include': '#escaped_char' }
+      { 'include': '#escaped_charname' }
+      { 'include': '#escaped_format'}
+    ]
+
+  'sextuplequoted':  # Sextuplequoted strings
+    'begin': /"""/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /"""(?!\")/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.sextuple.mammal'
+    'patterns': [
+      { 'include': '#escaped_char' }
+      { 'include': '#escaped_charname' }
+      { 'include': '#docstring'}
+    ]
+
+
+  'singlequoted_raw_formatted':  # Interpolated raw strings singlequoted
+    'begin': /(rf|fr)'/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /'|$/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.single.formatted.mammal'
+    'patterns': [
+      { 'include': '#escaped_format' }
+    ]
+
+  'singlequoted_raw':  # Raw strings singlequoted
+    'begin': /r'/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /'|$/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.single.raw.mammal'
+
+  'singlequoted_formatted':  # Interpolated strings singlequoted
+    'begin': /f'/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /'|$/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.single.formatted.mammal'
+    'patterns': [
+      { 'include': '#escaped_char' }
+      { 'include': '#escaped_charname' }
+      { 'include': '#escaped_format' }
+    ]
+
+  'singlequoted':  # Singlequoted strings
+    'begin': /'/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /'|$/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.single.mammal'
+    'patterns': [
+      { 'include': '#escaped_char' }
+      { 'include': '#escaped_charname' }
+    ]
+
+
+  'doublequoted_raw_formatted':  # Interpolated raw doublequoted strings
+    'begin': /(rf|fr)"/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /"|$/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.double.formatted.mammal'
+    'patterns': [
+      { 'include': '#escaped_format' }
+    ]
+
+  'doublequoted_raw':  # Raw strings doublequoted
+    'begin': /r"/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /"|$/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.double.raw.mammal'
+
+  'doublequoted_formatted':  # Interpolated doublequoted strings
+    'begin': /f"/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /"|$/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.double.formatted.mammal'
+    'patterns': [
+      { 'include': '#escaped_char' }
+      { 'include': '#escaped_charname' }
+      { 'include': '#escaped_format' }
+    ]
+
+  'doublequoted':  # Doublequoted strings
+    'begin': /"/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.mammal'
+    'end': /"|$/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.mammal'
+    'name': 'string.quoted.double.mammal'
+    'patterns': [
+      { 'include': '#escaped_char' }
+      { 'include': '#escaped_charname' }
+    ]
+
+
+  'escaped_char':  # An escaped character inside a string
+    'match': /\\[^\(\{\[]/
+    'name': 'constant.character.escape.mammal'
+  'escaped_charname':  # An escaped character name inside a string
+    'match': /\\\([A-Za-z0-9_]+\)/
+    'name': 'constant.character.escape.multiple.mammal'
+  'escaped_format':  # An escaped format definition inside a string
+    'begin': /\{/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.section.embedded.begin.mammal'
+    'end': /\}/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.section.embedded.end.mammal'
+    'name': 'source.mammal.emmbedded.source'
+    'patterns': [
+      {
+        'include': '$self'
+      }
+    ]
+
+  'docstring':  # Some stuff that is needed in docstrings
+    'match': /^\s*([A-Z][a-z]+):/
+    'captures':
+      '1':
+        'name': 'storage.type.annotation.mammal'
+
+
+  ##############################################################################
+  # An expression in backticks #################################################
+  ##############################################################################
+
+  'backticks':
+    'begin': /`/
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.backticks.begin.mammal'
+    'end': /`|$/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.backticks.end.mammal'
+    'name': 'quoted.backticks.mammal'
+    'patterns': [
+      { 'include': '#escaped_char' }
+      { 'include': '#escaped_charname' }
+    ]
+
+
+  ##############################################################################
+  # A typecast/typehint of the form `<type> blubb` #############################
+  ##############################################################################
+
+  'typecast':
+    'begin': /<(?=(\S.*\S|\S)>\s+[:α0:_*"'\[\{\(<])(?!in|from)/
+    'beginCaptures':
+      '1':
+        'name': 'punctuation.typecast.begin.mammal'
+    'end': />/
+    'endCaptures':
+      '0':
+        'name': 'punctuation.typecast.end.mammal'
+    'name': 'source.typecast.mammal'
+    'patterns': [
+      {
+        'match': /\|/
+        'name': 'punctuation.typecast.operator.or.mammal'
+      }
+      {
+        'match': /\./
+        'name': 'punctuation.typecast.operator.dot.mammal'
+      }
+      {
+        'match': /\*/
+        'name': 'punctuation.typecast.operator.all.mammal'
+      }
+      {
+        'match': /\b[:α:_][:α0:_]*\b/
+        'name': 'typename.mammal'
+      }
+    ]
+
+  'classname': # also matches typehints !!!
+    'match': /(<)([:α0:_]+)(>)/
+    'captures':
+      '1':
+        'name': 'punctuation.classname.begin.mammal'
+      '3':
+        'name': 'punctuation.classname.end.mammal'
+    'name': 'source.classname.mammal'
+
+  # Like the name says, this rule makes everything illegal
+  'everything_else_illegal':
+    'match': /.*/
+    'name': 'invalid.illegal.mammal'
+
+  #####################################################################
+  # Some multipurpose operators
+  #####################################################################
+
+
+  #####################################################################
+  # Some multipurpose operators
+  #####################################################################
+
+  'from':  # Other keywords
+    'match': /\b(from)\b/
+    'name': 'keyword.from.mammal'
+    'comment': 'keyword used in a multitude of operators'
+
+  'comma':  # Commas
+    'match': /,/
+    'name': 'keyword.operator.separator.comma.mammal'
+  'semicolon':  # Semicolons
+    'match': /;/
+    'name': 'keyword.operator.separator.semicolon.mammal'
+
+  # 'dotted_name':  # Name with a dot expression after it
+  #   'begin': /(?=[:α:_][:α0:_]*(\.[:α:_][:α0:_]*)*)/
+  #   'end': /(?![:α0:_\.])/
+  #   'patterns': [
+  #      {
+  #       'begin': /(\.)(?=[:α:_][:α0:_]*)/
+  #       'end': /(?![:α0:_])/
+  #       'patterns': [
+  #         {
+  #           'include': '#magic_function_names'
+  #         }
+  #         {
+  #           'include': '#magic_variable_names'
+  #         }
+  #         {
+  #           'include': '#illegal_names'
+  #         }
+  #         {
+  #           'include': '#generic_names'
+  #         }
+  #       ]
+  #     }
+#       {
+#         'begin': '(?<!\\.)(?=[A-Za-z_][A-Za-z0-9_]*)'
+#         'end': '(?![A-Za-z0-9_])'
+#         'patterns': [
+#           {
+#             'include': '#builtin_functions'
+#           }
+#           {
+#             'include': '#builtin_types'
+#           }
+#           {
+#             'include': '#builtin_exceptions'
+#           }
+#           {
+#             'include': '#illegal_names'
+#           }
+#           {
+#             'include': '#magic_function_names'
+#           }
+#           {
+#             'include': '#magic_variable_names'
+#           }
+#           {
+#             'include': '#language_variables'
+#           }
+#           {
+#             'include': '#generic_names'
+#           }
+#         ]
+#       }
+#     ]
+#   'entity_name_class':
+#     'patterns': [
+#       {
+#         'include': '#illegal_names'
+#       }
+#       {
+#         'include': '#generic_names'
+#       }
+#     ]
+#   'entity_name_function':
+#     'patterns': [
+#       {
+#         'include': '#magic_function_names'
+#       }
+#       {
+#         'include': '#illegal_names'
+#       }
+#       {
+#         'include': '#generic_names'
+#       }
+#     ]
+#   'escaped_char':
+#     'captures':
+#       '1':
+#         'name': 'constant.character.escape.hex.mammal'
+#       '2':
+#         'name': 'constant.character.escape.octal.mammal'
+#       '3':
+#         'name': 'constant.character.escape.newline.mammal'
+#       '4':
+#         'name': 'constant.character.escape.backlash.mammal'
+#       '5':
+#         'name': 'constant.character.escape.double-quote.mammal'
+#       '6':
+#         'name': 'constant.character.escape.single-quote.mammal'
+#       '7':
+#         'name': 'constant.character.escape.bell.mammal'
+#       '8':
+#         'name': 'constant.character.escape.backspace.mammal'
+#       '9':
+#         'name': 'constant.character.escape.formfeed.mammal'
+#       '10':
+#         'name': 'constant.character.escape.linefeed.mammal'
+#       '11':
+#         'name': 'constant.character.escape.return.mammal'
+#       '12':
+#         'name': 'constant.character.escape.tab.mammal'
+#       '13':
+#         'name': 'constant.character.escape.vertical-tab.mammal'
+#     'match': '(\\\\x[0-9A-F]{2})|(\\\\[0-7]{3})|(\\\\\\n)|(\\\\\\\\)|(\\\\\\")|(\\\\\')|(\\\\a)|(\\\\b)|(\\\\f)|(\\\\n)|(\\\\r)|(\\\\t)|(\\\\v)'
+#   'escaped_unicode_char':
+#     'captures':
+#       '1':
+#         'name': 'constant.character.escape.unicode.16-bit-hex.mammal'
+#       '2':
+#         'name': 'constant.character.escape.unicode.32-bit-hex.mammal'
+#       '3':
+#         'name': 'constant.character.escape.unicode.name.mammal'
+#     'match': '(\\\\U[0-9A-Fa-f]{8})|(\\\\u[0-9A-Fa-f]{4})|(\\\\N\\{[a-zA-Z ]+\\})'
+#   'function_name':
+#     'patterns': [
+#       {
+#         'include': '#magic_function_names'
+#       }
+#       {
+#         'include': '#magic_variable_names'
+#       }
+#       {
+#         'include': '#builtin_exceptions'
+#       }
+#       {
+#         'include': '#builtin_functions'
+#       }
+#       {
+#         'include': '#builtin_types'
+#       }
+#       {
+#         'include': '#generic_names'
+#       }
+#     ]
+#   'generic_names':
+#     'match': '[A-Za-z_][A-Za-z0-9_]*'
+#   'illegal_names':
+#     'match': '\\b(and|as|assert|break|class|continue|def|del|elif|else|except|exec|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|print|raise|return|try|while|with|yield|await)\\b'
+#     'name': 'invalid.illegal.name.mammal'
+#   'keyword_arguments':
+#     'begin': '\\b([a-zA-Z_][a-zA-Z_0-9]*)\\s*(=)(?!=)'
+#     'beginCaptures':
+#       '1':
+#         'name': 'variable.parameter.function.mammal'
+#       '2':
+#         'name': 'keyword.operator.assignment.mammal'
+#     'end': '\\s*(?:(,)|(?=$\\n?|[\\)\\:]))'
+#     'endCaptures':
+#       '1':
+#         'name': 'punctuation.separator.parameters.mammal'
+#     'patterns': [
+#       {
+#         'include': '$self'
+#       }
+#     ]
+#   'language_variables':
+#     'match': '\\b(self|cls)\\b'
+#     'name': 'variable.language.self.mammal'
+#   'line_continuation':
+#     'captures':
+#       '1':
+#         'name': 'punctuation.separator.continuation.line.mammal'
+#       '2':
+#         'name': 'invalid.illegal.unexpected-text.mammal'
+#     'match': '(\\\\)(.*)$\\n?'
+#   'magic_function_names':
+#     'comment': 'these methods have magic interpretation by mammal and are generally called indirectly through syntactic constructs'
+#     'match': '(?x)\\b(__(?:abs|add|and|bool|bytes|call|cmp|coerce|complex|contains|del|delattr|delete|delitem|delslice|dir|div|divmod|enter|eq|exit|float|floordiv|format|ge|get|getattr|getattribute|getitem|getslice|gt|hash|hex|iadd|iand|idiv|ifloordiv|ilshift|imatmul|imod|imul|index|init|instancecheck|int|invert|ior|ipow|irshift|isub|iter|itruediv|ixor|le|len|length_hint|long|lshift|lt|matmul|missing|mod|mul|ne|neg|next|new|nonzero|oct|or|pos|pow|radd|rand|rdiv|rdivmod|repr|reversed|rfloordiv|rlshift|rmatmul|rmod|rmul|ror|round|rpow|rrshift|rshift|rsub|rtruediv|rxor|set|setattr|setitem|setslice|str|sub|subclasscheck|truediv|unicode|xor)__)\\b'
+#     'name': 'support.function.magic.mammal'
+#   'magic_variable_names':
+#     'comment': 'magic variables which a class/module may have.'
+#     'match': '\\b__(all|annotations|bases|class|closure|code|debug|dict|doc|file|func|globals|kwdefaults|members|metaclass|methods|module|name|qualname|self|slots|weakref)__\\b'
+#     'name': 'support.variable.magic.mammal'
+#   'regular_expressions':
+#     'comment': 'Changed disabled to 1 to turn off syntax highlighting in “r” strings.'
+#     'disabled': 0
+#     'patterns': [
+#       {
+#         'include': 'source.regexp.mammal'
+#       }
+#     ]
+#   'string_quoted_double':
+#     'patterns': [
+#       {
+#         'begin': '([uU]r)(""")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted unicode-raw string'
+#         'end': '((?<=""")(")""|""")'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#         'name': 'string.quoted.double.block.unicode-raw-regex.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_unicode_char'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#           {
+#             'include': '#regular_expressions'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '([uU]R)(""")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted unicode-raw string without regular expression highlighting'
+#         'end': '((?<=""")(")""|""")'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#         'name': 'string.quoted.double.block.unicode-raw.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_unicode_char'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(r)(""")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'double quoted raw string'
+#         'end': '((?<=""")(")""|""")'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#         'name': 'string.quoted.double.block.raw-regex.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#           {
+#             'include': '#regular_expressions'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(R)(""")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'double quoted raw string'
+#         'end': '((?<=""")(")""|""")'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#         'name': 'string.quoted.double.block.raw.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '([uU])(""")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'double quoted unicode string'
+#         'end': '((?<=""")(")""|""")'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#         'name': 'string.quoted.double.block.unicode.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_unicode_char'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'captures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#           '3':
+#             'patterns': [
+#               {'include': '#constant_placeholder'}
+#               {'include': '#escaped_unicode_char'}
+#               {'include': '#escaped_char'}
+#               {'include': '#regular_expressions'}
+#             ]
+#           '4':
+#             'name': 'punctuation.definition.string.end.mammal'
+#         'comment': 'double-quoted raw string'
+#         'match': '([uU]r)(")((?:[^"\\\\]|\\\\.)*)(")'
+#         'name': 'string.quoted.double.single-line.unicode-raw-regex.mammal'
+#       }
+#       {
+#         'begin': '([uU]R)(")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'double-quoted raw string'
+#         'end': '((?<=")(")|")|(\\n)'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#           '3':
+#             'name': 'invalid.illegal.unclosed-string.mammal'
+#         'name': 'string.quoted.double.single-line.unicode-raw.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_unicode_char'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'captures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#           '3':
+#             'patterns': [
+#               {'include': '#constant_placeholder'}
+#               {'include': '#escaped_char'}
+#               {'include': '#regular_expressions'}
+#             ]
+#           '4':
+#             'name': 'punctuation.definition.string.end.mammal'
+#         'comment': 'double-quoted raw string'
+#         'match': '(r)(")((?:[^"\\\\]|\\\\.)*)(")'
+#         'name': 'string.quoted.double.single-line.raw-regex.mammal'
+#       }
+#       {
+#         'begin': '(R)(")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'double-quoted raw string'
+#         'end': '((?<=")(")|")|(\\n)'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#           '3':
+#             'name': 'invalid.illegal.unclosed-string.mammal'
+#         'name': 'string.quoted.double.single-line.raw.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '([uU])(")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'double quoted unicode string'
+#         'end': '((?<=")(")|")|(\\n)'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#           '3':
+#             'name': 'invalid.illegal.unclosed-string.mammal'
+#         'name': 'string.quoted.double.single-line.unicode.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_unicode_char'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(""")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'double quoted string'
+#         'end': '((?<=""")(")""|""")'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#         'name': 'string.quoted.double.block.sql.mammal'
+#         'patterns': [
+#           {
+#              'begin': '(?=\\s*(SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH))'
+#              'end': '(?=\\s*""")'
+#              'patterns': [
+#                 {
+#                   'include': 'source.sql'
+#                 }
+#              ]
+#           }
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(")(?=\\s*(SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH))'
+#         'beginCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'double quoted string'
+#         'end': '((?<=")(")|")|(\\n)'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#           '3':
+#             'name': 'invalid.illegal.unclosed-string.mammal'
+#         'name': 'string.quoted.double.single-line.sql.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#           {
+#             'include': 'source.sql'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(""")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'double quoted string'
+#         'end': '((?<=""")(")""|""")'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#         'name': 'string.quoted.double.block.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(")'
+#         'beginCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'double quoted string'
+#         'end': '((?<=")(")|")|(\\n)'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.double.mammal'
+#           '3':
+#             'name': 'invalid.illegal.unclosed-string.mammal'
+#         'name': 'string.quoted.double.single-line.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#     ]
+#   'string_quoted_single':
+#     'patterns': [
+#       {
+#         'captures':
+#           '1':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '3':
+#             'name': 'meta.empty-string.single.mammal'
+#         'match': '(?<!\')(\')((\'))(?!\')'
+#         'name': 'string.quoted.single.single-line.mammal'
+#       }
+#       {
+#         'begin': '([uU]r)(\'\'\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted unicode-raw string'
+#         'end': '((?<=\'\'\')(\')\'\'|\'\'\')'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.single.mammal'
+#         'name': 'string.quoted.single.block.unicode-raw-regex.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_unicode_char'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#           {
+#             'include': '#regular_expressions'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '([uU]R)(\'\'\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted unicode-raw string'
+#         'end': '((?<=\'\'\')(\')\'\'|\'\'\')'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.single.mammal'
+#         'name': 'string.quoted.single.block.unicode-raw.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_unicode_char'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(r)(\'\'\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted raw string'
+#         'end': '((?<=\'\'\')(\')\'\'|\'\'\')'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.single.mammal'
+#         'name': 'string.quoted.single.block.raw-regex.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#           {
+#             'include': '#regular_expressions'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(R)(\'\'\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted raw string'
+#         'end': '((?<=\'\'\')(\')\'\'|\'\'\')'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.single.mammal'
+#         'name': 'string.quoted.single.block.raw.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '([uU])(\'\'\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted unicode string'
+#         'end': '((?<=\'\'\')(\')\'\'|\'\'\')'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.single.mammal'
+#         'name': 'string.quoted.single.block.unicode.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_unicode_char'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'captures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#           '3':
+#             'patterns': [
+#               {'include': '#constant_placeholder'}
+#               {'include': '#escaped_unicode_char'}
+#               {'include': '#escaped_char'}
+#               {'include': '#regular_expressions'}
+#             ]
+#           '4':
+#             'name': 'punctuation.definition.string.end.mammal'
+#         'comment': 'single quoted raw string'
+#         'match': '([uU]r)(\')((?:[^\'\\\\]|\\\\.)*)(\')'
+#         'name': 'string.quoted.single.single-line.unicode-raw-regex.mammal'
+#       }
+#       {
+#         'begin': '([uU]R)(\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted raw string'
+#         'end': '(\')|(\\n)'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'invalid.illegal.unclosed-string.mammal'
+#         'name': 'string.quoted.single.single-line.unicode-raw.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_unicode_char'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'captures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#           '3':
+#             'patterns': [
+#               {'include': '#constant_placeholder'}
+#               {'include': '#escaped_char'}
+#               {'include': '#regular_expressions'}
+#             ]
+#           '4':
+#             'name': 'punctuation.definition.string.end.mammal'
+#         'comment': 'single quoted raw string'
+#         'match': '(r)(\')((?:[^\'\\\\]|\\\\.)*)(\')'
+#         'name': 'string.quoted.single.single-line.raw-regex.mammal'
+#       }
+#       {
+#         'begin': '(R)(\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted raw string'
+#         'end': '(\')|(\\n)'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'invalid.illegal.unclosed-string.mammal'
+#         'name': 'string.quoted.single.single-line.raw.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '([uU])(\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'storage.type.string.mammal'
+#           '2':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted unicode string'
+#         'end': '(\')|(\\n)'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'invalid.illegal.unclosed-string.mammal'
+#         'name': 'string.quoted.single.single-line.unicode.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_unicode_char'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(\'\'\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted string'
+#         'end': '((?<=\'\'\')(\')\'\'|\'\'\')'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.single.mammal'
+#         'name': 'string.quoted.single.block.sql.mammal'
+#         'patterns': [
+#           {
+#              'begin': '(?=\\s*(SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH))'
+#              'end': '(?=\\s*\'\'\')'
+#              'patterns': [
+#                 {
+#                   'include': 'source.sql'
+#                 }
+#              ]
+#           }
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(\')(?=\\s*(SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH))'
+#         'beginCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted string'
+#         'end': '(\')|(\\n)'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'invalid.illegal.unclosed-string.mammal'
+#         'name': 'string.quoted.single.single-line.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#           {
+#             'include': 'source.sql'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(\'\'\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted string'
+#         'end': '((?<=\'\'\')(\')\'\'|\'\'\')'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'meta.empty-string.single.mammal'
+#         'name': 'string.quoted.single.block.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#       {
+#         'begin': '(\')'
+#         'beginCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.begin.mammal'
+#         'comment': 'single quoted string'
+#         'end': '(\')|(\\n)'
+#         'endCaptures':
+#           '1':
+#             'name': 'punctuation.definition.string.end.mammal'
+#           '2':
+#             'name': 'invalid.illegal.unclosed-string.mammal'
+#         'name': 'string.quoted.single.single-line.mammal'
+#         'patterns': [
+#           {
+#             'include': '#constant_placeholder'
+#           }
+#           {
+#             'include': '#escaped_char'
+#           }
+#         ]
+#       }
+#     ]
+#   'strings':
+#     'patterns': [
+#       {
+#         'include': '#string_quoted_double'
+#       }
+#       {
+#         'include': '#string_quoted_single'
+#       }
+#     ]

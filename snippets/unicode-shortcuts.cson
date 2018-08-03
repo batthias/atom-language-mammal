@@ -1,0 +1,228 @@
+# Provide a multitude of symbols to be used
+'.source.mammal':
+  'Multiply':
+    prefix: '*'
+    body: '⋅'
+  'Subtract':
+    prefix: '-'
+    body: '−'
+  'Crossproduct':
+    prefix: 'x'
+    body: '×'
+
+  # Set operations
+  'Union':
+    prefix: 'u'
+    body: '∪'
+  '\\cup':
+    prefix: 'cup'
+    body: '∪'
+  'Intersect':
+    prefix: 'n'
+    body: '∩'
+  '\\cap':
+    prefix: 'cap'
+    body: '∩'
+  'Contains':
+    prefix: '<'
+    body: '⊂'
+  'Contained In':
+    prefix: '>'
+    body: '⊃'
+
+  'Approximately Equal':
+    prefix: '~='
+    body: '≈'
+  '\\approx':  # the same for the LaTeX name
+    prefix: 'approx'
+    body: '≈'
+  'Not Equal':
+    prefix: '/='
+    body: '≠'
+  'Greater Equal':
+    prefix: '>='
+    body: '≥'
+  'Lower Equal':
+    prefix: '<='
+    body: '≤'
+  'Arrow':
+    prefix: '->'
+    body: '→'
+
+  'Scientific notation':
+    prefix: 'e'
+    body: '${1:1.23}ᴇ${2:4}'
+  'Scientific notation 10':
+    prefix: 'ten'
+    body: '${1:1.23}⋅10^${2:4}'
+
+  'Ellipsis':
+    prefix: '...'
+    body: '…'
+
+  # Greek letters
+  '\\alpha':
+    prefix: 'alpha'
+    body: 'α'
+  '\\beta':
+    prefix: 'beta'
+    body: 'β'
+  '\\gamma':
+    prefix: 'gamma'
+    body: 'γ'
+  '\\Gamma':
+    prefix: 'Gamma'
+    body: 'Γ'
+  '\\delta':
+    prefix: 'delta'
+    body: 'δ'
+  '\\Delta':
+    prefix: 'Delta'
+    body: 'Δ'
+  '\\epsilon':
+    prefix: 'epsilon'
+    body: 'ε'
+  '\\varepsilon':
+    prefix: 'varepsilon'
+    body: '?'
+  '\\zeta':
+    prefix: 'zeta'
+    body: 'ζ'
+  '\\eta':
+    prefix: 'eta'
+    body: 'η'
+  '\\theta':
+    prefix: 'theta'
+    body: 'θ'
+  '\\vartheta':
+    prefix: 'vartheta'
+    body: 'ϑ'
+  '\\Theta':
+    prefix: 'Theta'
+    body: 'Θ'
+  '\\iota':
+    prefix: 'iota'
+    body: 'ι'
+  '\\kappa':
+    prefix: 'kappa'
+    body: 'κ'
+  '\\lambda':
+    prefix: 'lambda'
+    body: 'λ'
+  '\\Lambda':
+    prefix: 'Lambda'
+    body: 'Λ'
+  '\\mu':
+    prefix: 'mu'
+    body: 'μ'
+  '\\nu':
+    prefix: 'nu'
+    body: 'ν'
+  '\\xi':
+    prefix: 'xi'
+    body: 'ξ'
+  '\\Xi':
+    prefix: 'Xi'
+    body: 'Ξ'
+  '\\pi':
+    prefix: 'pi'
+    body: 'π'
+  '\\Pi':
+    prefix: 'Pi'
+    body: 'Π'
+  '\\rho':
+    prefix: 'rho'
+    body: 'ρ'
+  '\\varrho':
+    prefix: 'varrho'
+    body: '?'
+  '\\sigma':
+    prefix: 'sigma'
+    body: 'σ'
+  '\\Sigma':
+    prefix: 'Sigma'
+    body: 'Σ'
+  '\\tau':
+    prefix: 'tau'
+    body: 'τ'
+  '\\upsilon':
+    prefix: 'upsilon'
+    body: '?'
+  '\\Upsilon':
+    prefix: 'Upsilon'
+    body: '?'
+  '\\phi':
+    prefix: 'phi'
+    body: 'ϕ'
+  '\\varphi':
+    prefix: 'varphi'
+    body: 'φ'
+  '\\Phi':
+    prefix: 'Phi'
+    body: 'Φ'
+  '\\chi':
+    prefix: 'chi'
+    body: 'χ'
+  '\\psi':
+    prefix: 'psi'
+    body: 'ψ'
+  '\\Psi':
+    prefix: 'Psi'
+    body: 'Ψ'
+  '\\omega':
+    prefix: 'omega'
+    body: 'ω'
+  '\\Omega':
+    prefix: 'Omega'
+    body: 'Ω'
+
+  # Other letters
+  '\\cent':
+    prefix: 'cent'
+    body: '¢'
+  '\\pounds':
+    prefix: 'pounds'
+    body: '£'
+  '\\euro':
+    prefix: 'euro'
+    body: '€'
+  '\\yen':
+    prefix: 'yen'
+    body: '¥'
+
+  '\\degree':
+    prefix: 'degree'
+    body: '°'
+  '^-':
+    prefix: '^-'
+    body: '⁻'
+  '^0':
+    prefix: '^0'
+    body: '⁰'
+  '^1':
+    prefix: '^1'
+    body: '¹'
+  '^2':
+    prefix: '^2'
+    body: '²'
+  '^3':
+    prefix: '^3'
+    body: '³'
+  '^4':
+    prefix: '^4'
+    body: '⁴'
+  '^5':
+    prefix: '^5'
+    body: '⁵'
+  '^6':
+    prefix: '^6'
+    body: '⁶'
+  '^7':
+    prefix: '^7'
+    body: '⁷'
+  '^8':
+    prefix: '^8'
+    body: '⁸'
+  '^9':
+    prefix: '^9'
+    body: '⁹'

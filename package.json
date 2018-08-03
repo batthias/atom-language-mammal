@@ -1,0 +1,14 @@
+{
+  "name": "language-mammal",
+  "version": "0.0.1",
+  "description": "The Grammar for the mammal functional programming language",
+  "keywords": [
+    "language",
+    "grammar"
+  ],
+  "repository": "https://github.com/batthias/atom-language-mammal",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  }
+}
