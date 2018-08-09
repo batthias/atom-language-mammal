@@ -16,36 +16,56 @@ exampleCsonFile =
 
 ################################################################################
 fs = require('fs')
+path = require('path')
+
 
 compile = (fileName, newFileName) ->
     contents = fs.readFileSync(fileName, {encoding: 'utf-8'})
 
+    aliases = {  # in this dictionary we save the aliases
+        "\\": "\\\\",  # replace \ by \\
+        "'": "\\x27",
+    }
+    replaceAliases = (text) ->
+        for alias, replacement of aliases
+            text = text.replace alias, replacement
+        return text
+
     # TODO: make this MUCH more robust than this!
     # You're basicly just lucky if this works.
-    contents = contents.replace /(?<=:\s*)\/(.*)\/(?=\s*(#.*)?$)/mg,
-        (str, reg, _) ->
-            reg = reg.replace(/\\/g, "\\\\")  # replaces \ by \\
-            reg = reg.replace(/'/g, "\\x27")  # replaces quotes by their ascii escape
-            # TODO: those should be definable in the file dynamically
-            reg = reg.replace(/:α:/g, "A-Za-zα-ωϕ-ϛΓΔΘΛΞΠΣΦΨΩϐϵϑϰϱϝ")
-            reg = reg.replace(/:α0:/g, "A-Za-zα-ωϕ-ϛΓΔΘΛΞΠΣΦΨΩϐϵϑϰϱϝ_0-9")
-            return "'#{reg}'"
-    fs.writeFileSync(newFileName, contents)
+    # this would be cool but doesn‘t work  /(?<=:\s*)\/(.*)\/(?=\s*(#.*)?$)/mg,
+    newContents = ""
+    for line in contents.split('\n')
+        matchResults = line.match /^\s*#!define (:[^:]+:) = (.*)$/
+        if matchResults
+            console.log "matched expression", matchResults
+            aliases[matchResults[1]] = replaceAliases matchResults[2]
+        else
+            line = line.replace /(:\s*)\/(.*)\/(?=\s*(#.*)?$)/mg,
+                (str, colon, reg, _) -> "#{colon}'#{replaceAliases reg}'"
+            newContents += "#{line}\n"
+    fs.writeFileSync(newFileName, newContents)
 
-# Called directly as a script
-if require.main == module
-    compileFolder = "./grammars"
-    fs.readdir compileFolder, (err, files) ->
+compileFolder = (folder) ->
+    fs.readdir folder, (err, files) ->
+        console.log err
+        if not files then return
         files.forEach (fileName) ->
             newFileName = fileName.replace /\.grammar-cson$/, '.cson'
             if fileName != newFileName  # this is as "grammar-cson" file
                 compile(
-                    "#{compileFolder}/#{fileName}",
-                    "#{compileFolder}/#{newFileName}"
+                    "#{folder}/#{fileName}",
+                    "#{folder}/#{newFileName}"
                 )
                 console.log "compiled #{fileName}"
+
+# Called directly as a script
+if require.main == module
+    compileFolder path.join __dirname, "..", "grammars"
 else
-    module.exports.compile = compile
+    module.exports =
+        compile: compile
+        compileFolder: compileFolder
 
 
 ################################################################################

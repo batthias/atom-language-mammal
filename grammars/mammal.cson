@@ -1,25 +1,45 @@
+# vim:set expandtab tabstop=2 fenc=utf-8 ft=coffee:
+
 # If this is your first time writing a language grammar, check out
-# https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/
+# https:'/flight-manual.atom.io/hacking-atom/sections/creating-a-grammar'
+# This grammar is inspired by/uses regexes from
+# • https://github.com/atom/language-coffee-script/blob/master/grammars/coffeescript.cson
+# • https://github.com/atom/language-python/blob/master/grammars/python.cson
 #
 # To ease the creation of the grammar, this file is not written completely in CSON.
-# Instead it includes some extensions, that have to be transformed back to the CSON format.
-# The file ending in ".uc.cson" is the uncompiled one, that is supposed to be compiled to
+# Instead it includes some extensions, that have to be transformed back to the CSON format:
+# • "/regexp/" becomes "'regexp'" where "\" is expanded to "\\"
+# • "#!define :NAME: = EXPRESSION" defines an expression to be used again in a regexp
+# • ":NAME:" is expanded to the text it is defined as
+
+# The file ending in ".grammar-cson" is the uncompiled one, that is supposed to be compiled to
 # a file of the same name with the ".cson" extension only.
 # The `regex-railroad-diagram` atom extension is probably useful for writing this.
+#
+# Note: Currently tabs are completely unsupported, since I just couldn’t be bothered.
+#       Theoretically it should be possible to automatically replace all occurances of
+#       " " with "[ \t]" though, although you need to somehow handle spaces in square brackets.
 
 scopeName: 'source.mammal'
 name: 'Mammal'
 fileTypes: [
   'mm'
 ]
-firstLineMatch: '#![ \t]*\\/.*\\bmammal\\b.'  # match the shebang that specifies mammal files
+firstLineMatch: '#! *\\/.*\bmammal\b.*'  # match the shebang that specifies mammal files
+
+# Some global definitions ---------------------------------------------------------------
+
+# Lowercase letters
+# Uppercase letters
+# Both uppercase and lowercase letters
+# Superscript numbers
+# Subscript numbers
 
 # Patterns to apply ---------------------------------------------------------------------
-
 patterns: [
-  {
-    'include': '#lineComments'
-  }
+  { include: '#lineComments' }
+  { include: '#compilerHints' }
+  { include: '#string' }
   {
     begin: '({{)(#note)(}})'
     beginCaptures:
@@ -39,14 +59,41 @@ patterns: [
 
 # Repository of reusable patterns -------------------------------------------------------
 
-repository:
-  lineComments: # A comment on a line of its own
-    match: '^ *(#\\s)(.*)$'
-    name: 'comment'
-    captures:
-      1: {name: 'comment.delimiter'}
-      2: {name: 'comment.text'}
+# '?=' = positive lookahead
+# '?!' = negative lookahead (unfortunately this isn’t '?≠', which would be cooler)
+# '?<=' = positve lookbehind
+# '?<!' = negative lookbehind
 
-  somethingReusable:  # example reusable rule
-    match: 'some_regex'
-    name: 'something'
+repository:
+  lineComments:  # A comment until the end of the line
+    begin: '(^ +)?(?=#( |$))'
+    beginCaptures:
+      1: {name: 'punctuation.whitespace.comment.leading.mammal'}
+    end: '(?!\\G)'
+    patterns: [
+      {
+        begin: '#( |$)'
+        beginCaptures:
+          0: {name: 'punctuation.definition.comment.mammal'}
+        end: '\\n'
+        name: 'comment.line.number-sign.mammal'
+      }
+    ]
+
+  compilerHints:  # A compiler hint (until the end of the line)
+    begin: '(^ +)?(?=#!)'
+    beginCaptures:
+      1: {name: 'punctuation.whitespace.compilerhint.leading.mammal'}
+    end: '(?!\\G)'
+    patterns: [
+      {
+        begin: '#'
+        beginCaptures:
+          0: {name: 'punctuation.definition.compilerhint.mammal'}
+        end: '\\n'
+        name: 'compilerhint.line.number-sign.mammal'
+      }
+    ]
+
+  somethingReusable: {}  # example reusable rule
+

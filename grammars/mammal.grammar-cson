@@ -10,7 +10,7 @@
 # Instead it includes some extensions, that have to be transformed back to the CSON format:
 # • "/regexp/" becomes "'regexp'" where "\" is expanded to "\\"
 # • "#!define :NAME: = EXPRESSION" defines an expression to be used again in a regexp
-# • ":NAME:" is expanded after it has been defined
+# • ":NAME:" is expanded to the text it is defined as
 
 # The file ending in ".grammar-cson" is the uncompiled one, that is supposed to be compiled to
 # a file of the same name with the ".cson" extension only.
@@ -34,7 +34,8 @@ firstLineMatch: /#! *\/.*\bmammal\b.*/  # match the shebang that specifies mamma
 # Uppercase letters
 #!define :ω: = A-ZΞΛΩΨΓΦΣ∂Δ∩ΠΘℵ
 # Both uppercase and lowercase letters
-#!define :ωΩ: = :Ω::w:
+#!define :ωΩ: = :ω::Ω:
+#!define :ωΩ0: = :ω::Ω:0-9
 # Superscript numbers
 #!define :¹²³: = ¹²³⁴⁵⁶⁷⁸⁹⁰
 # Subscript numbers
@@ -43,6 +44,7 @@ firstLineMatch: /#! *\/.*\bmammal\b.*/  # match the shebang that specifies mamma
 # Patterns to apply ---------------------------------------------------------------------
 patterns: [
   { include: '#lineComments' }
+  { include: '#compilerHints' }
   { include: '#string' }
   {
     begin: /({{)(#note)(}})/
@@ -69,7 +71,7 @@ patterns: [
 # '?<!' = negative lookbehind
 
 repository:
-  lineComments: # A comment on a line of its own
+  lineComments:  # A comment until the end of the line
     #!define :commentBegin: = #( |$)
     begin: /(^ +)?(?=:commentBegin:)/
     beginCaptures:
@@ -85,4 +87,22 @@ repository:
       }
     ]
 
-  somethingReusable:  # example reusable rule
+  compilerHints:  # A compiler hint (until the end of the line)
+    begin: /(^ +)?(?=#!)/
+    beginCaptures:
+      1: {name: 'punctuation.whitespace.annotation.leading.mammal'}
+    end: /(?!\G)/
+    patterns: [
+      {
+        begin: /#!/
+        beginCaptures:
+          0: {name: 'punctuation.definition.annotation.mammal'}
+        end: /\n/
+        name: 'annotation.line.number-sign.mammal'
+      }
+    ]
+
+  genericNames:
+    match: /[:ωΩ:_][:ωΩ:_0-9]*/
+
+  somethingReusable: {}  # example reusable rule
