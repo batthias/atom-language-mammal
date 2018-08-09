@@ -29,7 +29,7 @@ module.exports =
       @statusBarTile = null
 
   consumeStatusBar: (statusBar) ->  # Use the status bar to display stuff
-    tile = 
+    tile = document.createElement('div')
     @statusBarTile = statusBar.addRightTile tile
 
   activateDeveloperMode: ->
