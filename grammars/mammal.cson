@@ -25,7 +25,7 @@ name: 'Mammal'
 fileTypes: [
   'mm'
 ]
-firstLineMatch: '#! *\\/.*\bmammal\b.*'  # match the shebang that specifies mammal files
+firstLineMatch: '#! *\\/.*\\bmammal\\b.*'  # match the shebang that specifies mammal files
 
 # Some global definitions ---------------------------------------------------------------
 
@@ -83,17 +83,24 @@ repository:
   compilerHints:  # A compiler hint (until the end of the line)
     begin: '(^ +)?(?=#!)'
     beginCaptures:
-      1: {name: 'punctuation.whitespace.compilerhint.leading.mammal'}
+      1: {name: 'punctuation.whitespace.annotation.leading.mammal'}
     end: '(?!\\G)'
     patterns: [
       {
         begin: '#'
         beginCaptures:
-          0: {name: 'punctuation.definition.compilerhint.mammal'}
+          0: {name: 'punctuation.definition.annotation.mammal'}
         end: '\\n'
-        name: 'compilerhint.line.number-sign.mammal'
+        name: 'annotation.line.number-sign.mammal'
+        patterns: [ { include: 'expression' } ]
       }
     ]
 
-  somethingReusable: {}  # example reusable rule
+  expression:
+    { include: 'genericNames' }
+    { include: 'lineComments' }
 
+  genericNames:
+    match: '[A-ZΞΛΩΨΓΦΣ∂Δ∩ΠΘℵa-zξλχωκψγφϕςαεοσνρτδυηπζβμϱϑ_][A-ZΞΛΩΨΓΦΣ∂Δ∩ΠΘℵa-zξλχωκψγφϕςαεοσνρτδυηπζβμϱϑ_0-9]*'
+
+  somethingReusable: {}  # example reusable rule

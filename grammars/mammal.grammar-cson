@@ -94,13 +94,21 @@ repository:
     end: /(?!\G)/
     patterns: [
       {
-        begin: /#!/
+        begin: /#/
         beginCaptures:
           0: {name: 'punctuation.definition.annotation.mammal'}
         end: /\n/
         name: 'annotation.line.number-sign.mammal'
+        patterns: [ { include: 'expression' } ]
       }
     ]
+
+  expression:
+    patterns: [
+      { include: 'genericNames' }
+      { include: 'lineComments' }
+    ]
+    name: 'meta.expression.mammal'
 
   genericNames:
     match: /[:ωΩ:_][:ωΩ:_0-9]*/

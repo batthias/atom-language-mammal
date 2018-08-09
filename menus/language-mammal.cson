@@ -1,0 +1,16 @@
+menu: [
+  {
+    label: 'Packages'
+    submenu: [
+      {
+        label: 'Language Mammal'
+        submenu: [
+          {
+            label: "Toggle Developer Mode"
+            command: "language-mammal:toggle-developer-mode"
+          }
+        ]
+      }
+    ]
+  }
+]

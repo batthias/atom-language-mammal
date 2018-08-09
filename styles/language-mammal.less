@@ -3,6 +3,8 @@
  * TODO: check whether those still work with the current version of atom
  */
 
+@import "syntax-variables";
+
 @font-face {
     font-family: batthiasIcons;
     src: url(atom://language-mammal/styles/batthias-icons.woff);
@@ -23,11 +25,16 @@
 
 // Some color changes
 // TODO: do these properly, as I don't think packages should alter colors!
-.syntax--mammal {
-    &.syntax--shebang .syntax--annotation.syntax--mammal {
-        color: hsl(136, 34%, 51%);
+.syntax--source.syntax--mammal {
+    .syntax--annotation.syntax--line.syntax--mammal {
+        .syntax--punctuation.syntax--definition.syntax--annotation.syntax--mammal {
+            color: @mono-3;  // TODO: there should be a color named @syntax-color-comment
+            font-style: italic;
+        }
     }
-    &.syntax--shebang .syntax--v-aardvark {  // #!/…/ mammal -v aardvark
+    //    color: hsl(136, 34%, 51%);
+    // }
+    /* &.syntax--shebang .syntax--v-aardvark {  // #!/…/ mammal -v aardvark
         text-decoration: underline;
         position: relative;
         &:hover:before {
@@ -49,7 +56,8 @@
             text-decoration: none;
             content: " = v0.0.x"
         }
-    }
+    } */
+
     &.syntax--keyword.syntax--operator {  // and or + - …
         color: hsv(188, 58%, 76%);
     }

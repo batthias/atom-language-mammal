@@ -22,26 +22,26 @@ path = require('path')
 compile = (fileName, newFileName) ->
     contents = fs.readFileSync(fileName, {encoding: 'utf-8'})
 
-    aliases = {  # in this dictionary we save the aliases
-        "\\": "\\\\",  # replace \ by \\
-        "'": "\\x27",
-    }
+    aliases = new Map();  # in this dictionary we save the aliases
+    aliases.set /\\/g, "\\\\"  # replace \ by \\
+    aliases.set /'/g, "\\x27"
+
     replaceAliases = (text) ->
-        for alias, replacement of aliases
+        aliases.forEach (replacement, alias) ->
             text = text.replace alias, replacement
         return text
 
     # TODO: make this MUCH more robust than this!
     # You're basicly just lucky if this works.
     # this would be cool but doesn‘t work  /(?<=:\s*)\/(.*)\/(?=\s*(#.*)?$)/mg,
+
     newContents = ""
     for line in contents.split('\n')
-        matchResults = line.match /^\s*#!define (:[^:]+:) = (.*)$/
+        matchResults = line.match /^\s*#!define (:[^:]+:) = (.*)\r?$/
         if matchResults
-            console.log "matched expression", matchResults
-            aliases[matchResults[1]] = replaceAliases matchResults[2]
+            aliases.set RegExp(matchResults[1], 'g'), replaceAliases matchResults[2]
         else
-            line = line.replace /(:\s*)\/(.*)\/(?=\s*(#.*)?$)/mg,
+            line = line.replace /(:\s*)\/(.*)\/(?=\s*(#.*)?\r?$)/,
                 (str, colon, reg, _) -> "#{colon}'#{replaceAliases reg}'"
             newContents += "#{line}\n"
     fs.writeFileSync(newFileName, newContents)
@@ -51,7 +51,8 @@ compileFolder = (folder) ->
         console.log err
         if not files then return
         files.forEach (fileName) ->
-            newFileName = fileName.replace /\.grammar-cson$/, '.cson'
+            console.log 'filename =', fileName
+            newFileName = fileName.replace /\.grammar-cson$/mg, '.cson'
             if fileName != newFileName  # this is as "grammar-cson" file
                 compile(
                     "#{folder}/#{fileName}",

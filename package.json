@@ -1,7 +1,6 @@
 {
   "name": "language-mammal",
   "version": "0.0.1",
-  "main": "./lib/main.coffee",
   "description": "The Grammar for the mammal functional programming language",
   "keywords": [
     "language",
@@ -11,5 +10,10 @@
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
+  },
+  "consumedServices": {
+    "status-bar": {
+      "versions": { "^1.0.0": "consumeStatusBar" }
+    }
   }
 }
